@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load hitcount_tags %}
+
+{% block title %} {{new.title}} {% endblock %}
+{% block content %}
+    <h1> {{ new.title }} </h1>
+    <h5> {{ new.publish_time }} | <i class="fa fa-eye" aria-hidden="true"></i> {% get_hit_count for new %}</h5>
+    <img src="{{new.image.url}}" alt="rasm">
+    <p> {{ new.body }} </p>
+
+    <div class="card-footer text-center">
+        {% if user.is_authenticated and user.is_superuser %}
+            <a href="{% url 'news_update' new.slug %}">Tahrirlash</a> |
+            <a href="{% url 'news_delete' new.slug %}">O'chirish</a>
+        {% endif %}
+    </div>
+    <h3>Bu yangilikga {{ comments_count }} ta izoh qoldirilgan ekan.</h3>
+    {% for comment in comments %}
+        <div class="comments" style="padding: 10px">
+            <p class="font-weight-bold">
+                {{comment.user}}
+                <span class="text-muted font-weight-normal">
+                    {{comment.created_time}}
+                </span>
+            </p>
+            {{comment.body | linebreaks}}
+        </div>
+    {% endfor %}
+    {% if user.is_authenticated %}
+        <div class="col-md-8 card mb-4 mt-3">
+            <div class="card-body">
+                <h3>Izoh qoldirish</h3>
+                <form method="POST" style="margin-top: 1.3em">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-lg">Yuborish</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

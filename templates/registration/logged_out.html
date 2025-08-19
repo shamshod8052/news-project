@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block title %} Logout sahifasi {% endblock title %}
+
+{% block content %}
+
+    <h2>LOGGED OUT</h2>
+    <p>Siz saytdan chiqdingiz!</p>
+
+    <a href="{% url 'login' %}">Qaytadan kirish</a>
+
+{% endblock content %}
